@@ -14,11 +14,16 @@ npm run preview   # Preview production build
 
 ## Architecture
 
-This is a single-component React app (Vite + React 19). All state and logic live in `src/App.jsx`:
+React 19 + Vite app. No routing, no external state management, no backend — all data is in-memory.
 
-- **State**: `transactions` array (id, description, amount, type, category, date), plus form fields and filter state
-- **Summary**: `totalIncome`, `totalExpenses`, `balance` computed from `transactions` via `reduce` — note `amount` is stored as a string, so arithmetic on it is buggy (string concatenation instead of numeric addition)
-- **Filtering**: `filteredTransactions` derived inline by chaining `.filter()` on `transactions` based on `filterType` and `filterCategory`
-- **Form**: `handleSubmit` appends a new transaction to state; `date` is auto-set to today
+**Component tree:**
+- `App` — holds the `transactions` array in state; passes it down and handles `onAdd`
+  - `Summary` — receives `transactions`, computes `totalIncome`, `totalExpenses`, `balance` internally
+  - `TransactionForm` — owns its own form state (description, amount, type, category); calls `onAdd(transaction)` on submit
+  - `TransactionList` — receives `transactions`, owns filter state (filterType, filterCategory) internally
 
-Styling is in `src/App.css`. No routing, no external state management, no backend — all data is in-memory.
+**Transaction shape:** `{ id, description, amount (number), type ("income"|"expense"), category, date (YYYY-MM-DD) }`
+
+Categories are defined locally in both `TransactionForm` and `TransactionList`: `["food", "housing", "utilities", "transport", "entertainment", "salary", "other"]`
+
+Styling is in `src/App.css`.
