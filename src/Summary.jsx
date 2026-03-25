@@ -1,11 +1,13 @@
 import { useMemo } from 'react'
+import { filterValidTransactions } from './utils'
 
 function Summary({ transactions }) {
   const { totalIncome, totalExpenses, balance } = useMemo(() => {
-    const income = transactions
+    const validTransactions = filterValidTransactions(transactions);
+    const income = validTransactions
       .filter(t => t.type === "income")
       .reduce((sum, t) => sum + t.amount, 0);
-    const expenses = transactions
+    const expenses = validTransactions
       .filter(t => t.type === "expense")
       .reduce((sum, t) => sum + t.amount, 0);
 

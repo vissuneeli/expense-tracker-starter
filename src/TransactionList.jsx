@@ -1,12 +1,13 @@
 import { useState, useMemo } from 'react'
 import { TRANSACTION_CATEGORIES } from './constants'
+import { filterValidTransactions } from './utils'
 
 function TransactionList({ transactions, onDelete }) {
   const [filterType, setFilterType] = useState("all");
   const [filterCategory, setFilterCategory] = useState("all");
 
   const filteredTransactions = useMemo(() => {
-    let filtered = transactions;
+    let filtered = filterValidTransactions(transactions);
     if (filterType !== "all") {
       filtered = filtered.filter(t => t.type === filterType);
     }
