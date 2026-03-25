@@ -1,17 +1,27 @@
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 import { TRANSACTION_CATEGORIES } from './constants'
 
 function TransactionList({ transactions, onDelete }) {
   const [filterType, setFilterType] = useState("all");
   const [filterCategory, setFilterCategory] = useState("all");
 
-  let filteredTransactions = transactions;
-  if (filterType !== "all") {
-    filteredTransactions = filteredTransactions.filter(t => t.type === filterType);
-  }
-  if (filterCategory !== "all") {
-    filteredTransactions = filteredTransactions.filter(t => t.category === filterCategory);
-  }
+  const filteredTransactions = useMemo(() => {
+    let filtered = transactions;
+    if (filterType !== "all") {
+      filtered = filtered.filter(t => t.type === filterType);
+    }
+    if (filterCategory !== "all") {
+      filtered = filtered.filter(t => t.category === filterCategory);
+    }
+    return filtered;
+  }, [transactions, filterType, filterCategory]);
+
+  const formatCurrency = (amount) => {
+    return new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: 'USD',
+    }).format(amount);
+  };
 
   return (
     <div className="transactions">
@@ -41,40 +51,39 @@ function TransactionList({ transactions, onDelete }) {
           </tr>
         </thead>
         <tbody>
-          {filteredTransactions.map(t => (
-            <tr key={t.id}>
-              <td>{t.date}</td>
-              <td>{t.description}</td>
-              <td>{t.category}</td>
-              <td className={t.type === "income" ? "income-amount" : "expense-amount"}>
-                {t.type === "income" ? "+" : "-"}${t.amount}
+          {filteredTransactions.length === 0 ? (
+            <tr>
+              <td colSpan="5" style={{ textAlign: 'center', padding: '20px', color: '#666' }}>
+                No transactions found. {filterType !== "all" || filterCategory !== "all" ? "Try adjusting your filters." : "Add one to get started!"}
               </td>
-              <td>
-                <span
-                  className="delete-icon"
-                  role="button"
-                  tabIndex={0}
-                  onClick={() => {
-                    if (window.confirm("Are you sure you want to delete this transaction?")) {
-                      onDelete(t.id);
-                    }
-                  }}
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter' || e.key === ' ') {
-                      e.preventDefault();
+            </tr>
+          ) : (
+            filteredTransactions.map(t => (
+              <tr key={t.id}>
+                <td>{t.date}</td>
+                <td>{t.description}</td>
+                <td>{t.category}</td>
+                <td className={t.type === "income" ? "income-amount" : "expense-amount"}>
+                  {t.type === "income" ? "+" : "-"}{formatCurrency(Math.abs(t.amount))}
+                </td>
+                <td>
+                  <button
+                    className="delete-icon"
+                    onClick={() => {
                       if (window.confirm("Are you sure you want to delete this transaction?")) {
                         onDelete(t.id);
                       }
-                    }
-                  }}
-                  title="Delete transaction"
-                  aria-label={`Delete transaction ${t.description}`}
-                >
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="14" height="14" aria-hidden="true" focusable="false"><path d="M3 6h18v2H3V6zm2 3h14l-1 11H6L5 9zm3-6h8l1 2H7l1-2z"/></svg>
-                </span>
-              </td>
-            </tr>
-          ))}
+                    }}
+                    title="Delete transaction"
+                    aria-label={`Delete transaction: ${t.description}`}
+                    type="button"
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="14" height="14" aria-hidden="true" focusable="false"><path d="M3 6h18v2H3V6zm2 3h14l-1 11H6L5 9zm3-6h8l1 2H7l1-2z"/></svg>
+                  </button>
+                </td>
+              </tr>
+            ))
+          )}
         </tbody>
       </table>
     </div>
