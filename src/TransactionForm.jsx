@@ -10,7 +10,7 @@ function TransactionForm({ onAdd }) {
   const handleSubmit = (e) => {
     e.preventDefault();
     const amountNum = parseFloat(amount);
-    if (!description || !amount || amountNum <= 0) return;
+    if (!description || !amount || isNaN(amountNum) || amountNum <= 0) return;
 
     onAdd({
       id: crypto.randomUUID(),
