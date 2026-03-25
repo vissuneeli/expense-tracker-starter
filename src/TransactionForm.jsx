@@ -13,7 +13,7 @@ function TransactionForm({ onAdd }) {
     if (!description || !amount || amountNum <= 0) return;
 
     onAdd({
-      id: Date.now(),
+      id: crypto.randomUUID(),
       description,
       amount: amountNum,
       type,
