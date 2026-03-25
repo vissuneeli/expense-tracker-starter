@@ -1,6 +1,5 @@
 import { useState } from 'react'
-
-const categories = ["food", "housing", "utilities", "transport", "entertainment", "salary", "other"];
+import { TRANSACTION_CATEGORIES } from './constants'
 
 function TransactionList({ transactions, onDelete }) {
   const [filterType, setFilterType] = useState("all");
@@ -25,7 +24,7 @@ function TransactionList({ transactions, onDelete }) {
         </select>
         <select value={filterCategory} onChange={(e) => setFilterCategory(e.target.value)}>
           <option value="all">All Categories</option>
-          {categories.map(cat => (
+          {TRANSACTION_CATEGORIES.map(cat => (
             <option key={cat} value={cat}>{cat}</option>
           ))}
         </select>
@@ -51,11 +50,28 @@ function TransactionList({ transactions, onDelete }) {
                 {t.type === "income" ? "+" : "-"}${t.amount}
               </td>
               <td>
-                <button className="delete-btn" onClick={() => {
-                  if (window.confirm("Are you sure you want to delete this transaction?")) {
-                    onDelete(t.id);
-                  }
-                }}>Delete</button>
+                <span
+                  className="delete-icon"
+                  role="button"
+                  tabIndex={0}
+                  onClick={() => {
+                    if (window.confirm("Are you sure you want to delete this transaction?")) {
+                      onDelete(t.id);
+                    }
+                  }}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      e.preventDefault();
+                      if (window.confirm("Are you sure you want to delete this transaction?")) {
+                        onDelete(t.id);
+                      }
+                    }
+                  }}
+                  title="Delete transaction"
+                  aria-label={`Delete transaction ${t.description}`}
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="14" height="14" aria-hidden="true" focusable="false"><path d="M3 6h18v2H3V6zm2 3h14l-1 11H6L5 9zm3-6h8l1 2H7l1-2z"/></svg>
+                </span>
               </td>
             </tr>
           ))}
