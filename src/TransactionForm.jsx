@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import PropTypes from 'prop-types'
 import { TRANSACTION_CATEGORIES } from './constants'
 
 function TransactionForm({ onAdd }) {
@@ -59,3 +60,7 @@ function TransactionForm({ onAdd }) {
 }
 
 export default TransactionForm
+
+TransactionForm.propTypes = {
+  onAdd: PropTypes.func.isRequired,
+};

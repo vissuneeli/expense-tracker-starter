@@ -1,4 +1,5 @@
 import { useState, useMemo } from 'react'
+import PropTypes from 'prop-types'
 import { TRANSACTION_CATEGORIES } from './constants'
 import { filterValidTransactions } from './utils'
 
@@ -92,3 +93,17 @@ function TransactionList({ transactions, onDelete }) {
 }
 
 export default TransactionList
+
+TransactionList.propTypes = {
+  transactions: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string.isRequired,
+      description: PropTypes.string.isRequired,
+      amount: PropTypes.number.isRequired,
+      type: PropTypes.oneOf(['income', 'expense']).isRequired,
+      category: PropTypes.string.isRequired,
+      date: PropTypes.string.isRequired,
+    })
+  ).isRequired,
+  onDelete: PropTypes.func.isRequired,
+};

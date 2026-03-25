@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import PropTypes from 'prop-types'
 import './App.css'
 import Summary from './Summary'
 import TransactionForm from './TransactionForm'
@@ -37,3 +38,7 @@ function App() {
 }
 
 export default App
+
+App.propTypes = {
+  // App component has no props
+};

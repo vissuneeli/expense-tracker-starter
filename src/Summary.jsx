@@ -1,4 +1,5 @@
 import { useMemo } from 'react'
+import PropTypes from 'prop-types'
 import { filterValidTransactions } from './utils'
 
 function Summary({ transactions }) {
@@ -44,3 +45,16 @@ function Summary({ transactions }) {
 }
 
 export default Summary
+
+Summary.propTypes = {
+  transactions: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string.isRequired,
+      description: PropTypes.string.isRequired,
+      amount: PropTypes.number.isRequired,
+      type: PropTypes.oneOf(['income', 'expense']).isRequired,
+      category: PropTypes.string.isRequired,
+      date: PropTypes.string.isRequired,
+    })
+  ).isRequired,
+};
