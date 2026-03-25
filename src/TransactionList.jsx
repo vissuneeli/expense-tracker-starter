@@ -43,13 +43,14 @@ function TransactionList({ transactions, onDelete }) {
       </div>
 
       <table>
+        <caption>List of income and expense transactions</caption>
         <thead>
           <tr>
-            <th>Date</th>
-            <th>Description</th>
-            <th>Category</th>
-            <th>Amount</th>
-            <th></th>
+            <th scope="col">Date</th>
+            <th scope="col">Description</th>
+            <th scope="col">Category</th>
+            <th scope="col">Amount</th>
+            <th scope="col">Actions</th>
           </tr>
         </thead>
         <tbody>

@@ -255,3 +255,19 @@ th {
   background-color: #b71c1c;
   border-color: #b71c1c;
 }
+
+/* Table Caption */
+table caption {
+  font-size: 1.17em;
+  font-weight: bold;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  text-align: left;
+}
+
+/* Transactions Section Title */
+.transactions h2 {
+  font-size: 1.5em;
+  margin-top: 2rem;
+  margin-bottom: 16px;
+}
