@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import PropTypes from 'prop-types'
 import { TRANSACTION_CATEGORIES } from './constants'
 
 function TransactionForm({ onAdd }) {
@@ -10,10 +11,10 @@ function TransactionForm({ onAdd }) {
   const handleSubmit = (e) => {
     e.preventDefault();
     const amountNum = parseFloat(amount);
-    if (!description || !amount || amountNum <= 0) return;
+    if (!description || !amount || isNaN(amountNum) || amountNum <= 0) return;
 
     onAdd({
-      id: Date.now(),
+      id: crypto.randomUUID(),
       description,
       amount: amountNum,
       type,
@@ -59,3 +60,7 @@ function TransactionForm({ onAdd }) {
 }
 
 export default TransactionForm
+
+TransactionForm.propTypes = {
+  onAdd: PropTypes.func.isRequired,
+};
