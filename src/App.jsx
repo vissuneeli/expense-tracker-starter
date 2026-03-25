@@ -4,6 +4,7 @@ import './App.css'
 import Summary from './Summary'
 import TransactionForm from './TransactionForm'
 import TransactionList from './TransactionList'
+import ConfirmDialog from './ConfirmDialog'
 
 function App() {
   const [transactions, setTransactions] = useState([
@@ -17,12 +18,24 @@ function App() {
     { id: "550e8400-e29b-41d4-a716-446655440008", description: "Netflix", amount: 15, type: "expense", category: "entertainment", date: "2025-01-10" },
   ]);
 
+  const [confirmDialog, setConfirmDialog] = useState({ isOpen: false, transactionId: null, description: null });
+
   const handleAdd = (transaction) => {
     setTransactions([...transactions, transaction]);
   };
 
-  const handleDelete = (id) => {
+  const handleDeleteClick = (id, description) => {
+    setConfirmDialog({ isOpen: true, transactionId: id, description });
+  };
+
+  const handleConfirmDelete = () => {
+    const id = confirmDialog.transactionId;
     setTransactions(transactions.filter(t => t.id !== id));
+    setConfirmDialog({ isOpen: false, transactionId: null, description: null });
+  };
+
+  const handleCancelDelete = () => {
+    setConfirmDialog({ isOpen: false, transactionId: null, description: null });
   };
 
   return (
@@ -32,7 +45,16 @@ function App() {
 
       <Summary transactions={transactions} />
       <TransactionForm onAdd={handleAdd} />
-      <TransactionList transactions={transactions} onDelete={handleDelete} />
+      <TransactionList transactions={transactions} onDelete={handleDeleteClick} />
+      <ConfirmDialog
+        isOpen={confirmDialog.isOpen}
+        title="Delete Transaction"
+        message={`Are you sure you want to delete "${confirmDialog.description}"?`}
+        confirmText="Delete"
+        cancelText="Cancel"
+        onConfirm={handleConfirmDelete}
+        onCancel={handleCancelDelete}
+      />
     </div>
   );
 }
