@@ -145,4 +145,36 @@ th {
   cursor: pointer;
   font-size: 12px;
   color: #333;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.delete-icon {
+  padding: 6px;
+  background: transparent;
+  border-radius: 4px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: #333;
+}
+
+.delete-btn svg,
+.delete-icon svg {
+  width: 14px;
+  height: 14px;
+  fill: #e53935; /* red icon */
+  display: inline-block;
+}
+
+.delete-btn:hover svg,
+.delete-icon:hover svg {
+  fill: #b71c1c; /* darker red on hover */
+}
+
+.delete-icon:focus {
+  outline: 2px solid #1976d2;
+  outline-offset: 2px;
 }
